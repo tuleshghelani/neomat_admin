@@ -1,0 +1,127 @@
+@use '@angular/material' as mat;
+
+:root {
+  --primary-color: #17a3de;
+  --accent-color: #a1a1a6;
+  --silver-light: #f5f5f7;
+  --silver-dark: #e1e1e3;
+  --gray-light: #d4d4d8;
+  --gray-dark: #a1a1a6;
+  --white: #ffffff;
+  --black: #000000;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: var(--silver-light);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Material Theme
+$primary-palette: (
+  50: lighten(#17a3de, 40%),
+  100: lighten(#17a3de, 30%),
+  200: lighten(#17a3de, 20%),
+  300: lighten(#17a3de, 10%),
+  400: lighten(#17a3de, 5%),
+  500: #17a3de,
+  600: darken(#17a3de, 5%),
+  700: darken(#17a3de, 10%),
+  800: darken(#17a3de, 20%),
+  900: darken(#17a3de, 30%),
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: white,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  )
+);
+
+$accent-palette: (
+  50: lighten(#a1a1a6, 40%),
+  100: lighten(#a1a1a6, 30%),
+  200: lighten(#a1a1a6, 20%),
+  300: lighten(#a1a1a6, 10%),
+  400: lighten(#a1a1a6, 5%),
+  500: #a1a1a6,
+  600: darken(#a1a1a6, 5%),
+  700: darken(#a1a1a6, 10%),
+  800: darken(#a1a1a6, 20%),
+  900: darken(#a1a1a6, 30%),
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: rgba(black, 0.87),
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  )
+);
+
+$theme-primary: mat.define-palette($primary-palette);
+$theme-accent: mat.define-palette($accent-palette);
+
+$theme: mat.define-light-theme((
+  color: (
+    primary: $theme-primary,
+    accent: $theme-accent,
+  ),
+  typography: mat.define-typography-config(),
+  density: 0,
+));
+
+@include mat.core();
+@include mat.all-component-themes($theme);
+
+// Global styles
+.mat-mdc-card {
+  border-radius: 12px !important;
+}
+
+.mat-mdc-button, .mat-mdc-raised-button {
+  border-radius: 8px !important;
+}
+
+// Responsive utilities
+.hide-on-mobile {
+  @media (max-width: 600px) {
+    display: none !important;
+  }
+}
+
+.show-on-mobile {
+  @media (min-width: 601px) {
+    display: none !important;
+  }
+}
+
+// Animation classes
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,52 @@
+<div class="login-container">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>Welcome Back</mat-card-title>
+      <mat-card-subtitle>Please sign in to continue</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-field">
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" placeholder="Enter your email">
+            <mat-icon matSuffix>email</mat-icon>
+            <app-error-message
+              *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['required']"
+              message="Email is required">
+            </app-error-message>
+            <app-error-message
+              *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['email']"
+              message="Please enter a valid email">
+            </app-error-message>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <app-error-message
+              *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['required']"
+              message="Password is required">
+            </app-error-message>
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid || isLoading">
+            {{ isLoading ? 'Signing in...' : 'Sign In' }}
+          </button>
+        </div>
+
+        <app-error-message *ngIf="errorMessage" [message]="errorMessage"></app-error-message>
+      </form>
+
+      <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,46 @@
+<div class="dashboard">
+  <header>
+    <nav>
+      <div class="nav-links">
+        <a [class.active]="currentTab === 'enquiry'" (click)="setTab('enquiry')">Enquiry</a>
+        <a [class.active]="currentTab === 'new'" (click)="setTab('new')">New</a>
+      </div>
+      <button class="logout-btn" (click)="logout()">Logout</button>
+    </nav>
+  </header>
+
+  <main>
+    <div *ngIf="currentTab === 'enquiry'" class="enquiries">
+      <h2>Enquiries</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Company Name</th>
+              <th>Email</th>
+              <th>Mobile Number</th>
+              <th>Address</th>
+              <th>Created At</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let enquiry of enquiries">
+              <td>{{enquiry.name}}</td>
+              <td>{{enquiry.company_name}}</td>
+              <td>{{enquiry.email}}</td>
+              <td>{{enquiry.mobilenumber}}</td>
+              <td>{{enquiry.address}}</td>
+              <td>{{enquiry.created_at | date}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div *ngIf="currentTab === 'new'" class="new-content">
+      <h2>New Content</h2>
+      <p>New content coming soon...</p>
+    </div>
+  </main>
+</div>
