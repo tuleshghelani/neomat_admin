@@ -1,0 +1,88 @@
+@import '../../../styles/variables';
+
+
+// Direct color definitions
+$primary-color: #17a3de;
+$secondary-color: #a1a1a6;
+$hover-color: #a1a1a6;
+$text-color: #000000;
+$light-gray: #f5f5f7;
+$border-color: #d4d4d8;
+$white: #ffffff;
+$transition-time: 0.3s;
+$header-height: 100px;
+$header-offset: 120px;
+$spacing-md: 1rem;
+.header {
+    background: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+  }
+  
+  .nav-left {
+    display: flex;
+    gap: 1.5rem;
+  }
+  
+  .nav-link {
+    color: var(--gray-dark);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 0;
+    transition: color 0.2s;
+  
+    &:hover, &.active {
+      color: var(--primary-color);
+    }
+  }
+  
+  .btn-logout {
+    background: transparent;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    
+    &:hover {
+      background: var(--primary-color);
+      color: white;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .nav-left {
+      gap: 1rem;
+    }
+  
+    .nav-link {
+      font-size: 0.875rem;
+    }
+  
+    .btn-logout {
+      font-size: 0.875rem;
+      padding: 0.375rem 0.75rem;
+    }
+  }
+
+
+  
+  .dashboard-header {
+    margin-bottom: $spacing-lg;
+    box-shadow: $shadow-sm;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: $primary-color;
+    color: $white;
+  }

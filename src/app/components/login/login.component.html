@@ -1,52 +1,85 @@
-<div class="login-container">
-  <mat-card class="login-card">
-    <mat-card-header>
-      <mat-card-title>Welcome Back</mat-card-title>
-      <mat-card-subtitle>Please sign in to continue</mat-card-subtitle>
-    </mat-card-header>
-
-    <mat-card-content>
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <div class="form-field">
-          <mat-form-field appearance="outline">
-            <mat-label>Email</mat-label>
-            <input matInput type="email" formControlName="email" placeholder="Enter your email">
-            <mat-icon matSuffix>email</mat-icon>
-            <app-error-message
-              *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['required']"
-              message="Email is required">
-            </app-error-message>
-            <app-error-message
-              *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['email']"
-              message="Please enter a valid email">
-            </app-error-message>
-          </mat-form-field>
+<div class="login-wrapper">
+  <div class="login-container">
+    <div class="login-left">
+      <div class="brand-section">
+        <div class="logo-wrapper">
+          <!-- <img src="assets/images/logo.png" alt="NeoMat Admin" class="logo"> -->
+        </div>
+        <h2>NeoMat Admin</h2>
+        <p>Manage your business efficiently with our powerful admin dashboard</p>
+      </div>
+    </div>
+    
+    <div class="login-right">
+      <div class="login-form-container">
+        <div class="login-header">
+          <h1>Welcome Back!</h1>
+          <p>Please sign in to your account</p>
         </div>
 
-        <div class="form-field">
-          <mat-form-field appearance="outline">
-            <mat-label>Password</mat-label>
-            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
-            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
-              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+          <div class="form-group">
+            <div class="label-wrapper">
+              <label for="email">Email Address</label>
+            </div>
+            <div class="input-container">
+              <div class="input-icon">
+                <span class="material-icons">mail</span>
+              </div>
+              <input 
+                id="email"
+                type="email" 
+                formControlName="email" 
+                placeholder="Enter your email address"
+                [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+              >
+            </div>
+            <div class="error-message" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+              <span *ngIf="loginForm.get('email')?.errors?.['required']">Email is required</span>
+              <span *ngIf="loginForm.get('email')?.errors?.['email']">Please enter a valid email address</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="label-wrapper">
+              <label for="password">Password</label>
+            </div>
+            <div class="input-container">
+              <div class="input-icon">
+                <span class="material-icons">lock</span>
+              </div>
+              <input 
+                id="password"
+                [type]="hidePassword ? 'password' : 'text'" 
+                formControlName="password" 
+                placeholder="Enter your password"
+                [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+              >
+              <div class="input-icon right" (click)="hidePassword = !hidePassword">
+                <span class="material-icons">{{hidePassword ? 'visibility_off' : 'visibility'}}</span>
+              </div>
+            </div>
+            <div class="error-message" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+              <span *ngIf="loginForm.get('password')?.errors?.['required']">Password is required</span>
+            </div>
+          </div>
+
+          <div class="form-options">
+            <label class="remember-me">
+              <!-- <input type="checkbox" formControlName="rememberMe"> -->
+              <!-- <span class="checkbox-label">Remember me</span> -->
+            </label>
+            <!-- <a href="#" class="forgot-password">Forgot Password?</a> -->
+          </div>
+
+          <div class="button-wrapper">
+            <button type="submit" [disabled]="loginForm.invalid || isLoading">
+              <span *ngIf="!isLoading">Sign In</span>
+              <div class="loader" *ngIf="isLoading"></div>
             </button>
-            <app-error-message
-              *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['required']"
-              message="Password is required">
-            </app-error-message>
-          </mat-form-field>
-        </div>
-
-        <div class="form-actions">
-          <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid || isLoading">
-            {{ isLoading ? 'Signing in...' : 'Sign In' }}
-          </button>
-        </div>
-
-        <app-error-message *ngIf="errorMessage" [message]="errorMessage"></app-error-message>
-      </form>
-
-      <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
-    </mat-card-content>
-  </mat-card>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>

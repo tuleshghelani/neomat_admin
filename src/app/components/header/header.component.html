@@ -1,0 +1,21 @@
+<header class="header">
+    <mat-toolbar color="primary" class="dashboard-header">
+        <span class="dashboard-title">NeoMat Admin Dashboard</span>
+        <span class="spacer"></span>
+        <button mat-icon-button (click)="logout()" aria-label="Logout">
+          <mat-icon>logout</mat-icon>
+        </button>
+    </mat-toolbar>
+    <div class="container">
+      <nav class="nav">
+        <div class="nav-left">
+          <a routerLink="/dashboard" class="nav-link" routerLinkActive="active">Dashboard</a>
+          <a routerLink="/enquiries" class="nav-link" routerLinkActive="active">Enquiries</a>
+          <a routerLink="/contact" class="nav-link" routerLinkActive="active">Contact</a>
+        </div>
+        <div class="nav-right">
+          <button class="btn btn-logout" (click)="logout()">Logout</button>
+        </div>
+      </nav>
+    </div>
+</header>
