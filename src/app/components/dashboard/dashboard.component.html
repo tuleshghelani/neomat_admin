@@ -1,106 +1,110 @@
 <div class="dashboard-container">
-  <mat-card class="table-card" appearance="outlined">
+  <mat-card class="dashboard-card">
     <mat-card-header>
       <mat-card-title>Enquiries</mat-card-title>
     </mat-card-header>
-    
+
     <mat-card-content>
-      <div class="table-container">
-        <table mat-table [dataSource]="dataSource" class="enquiries-table">
-          <!-- No Column -->
-          <ng-container matColumnDef="no">
-            <th mat-header-cell *matHeaderCellDef>No.</th>
-            <td mat-cell *matCellDef="let element; let i = index">
-              {{ (pagination.currentPage - 1) * pagination.pageSize + i + 1 }}
-            </td>
-          </ng-container>
-
-          <!-- Name Column -->
-          <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>Name</th>
-            <td mat-cell *matCellDef="let element">{{ element.name }}</td>
-          </ng-container>
-
-          <!-- Company Name Column -->
-          <ng-container matColumnDef="company_name">
-            <th mat-header-cell *matHeaderCellDef>Company</th>
-            <td mat-cell *matCellDef="let element">{{ element.company_name }}</td>
-          </ng-container>
-
-          <!-- Email Column -->
-          <ng-container matColumnDef="email">
-            <th mat-header-cell *matHeaderCellDef>Email</th>
-            <td mat-cell *matCellDef="let element">{{ element.email }}</td>
-          </ng-container>
-
-          <!-- Mobile Number Column -->
-          <ng-container matColumnDef="mobilenumber">
-            <th mat-header-cell *matHeaderCellDef>Mobile</th>
-            <td mat-cell *matCellDef="let element">{{ element.mobilenumber }}</td>
-          </ng-container>
-
-          <!-- Address Column -->
-          <ng-container matColumnDef="address">
-            <th mat-header-cell *matHeaderCellDef>Address</th>
-            <td mat-cell *matCellDef="let element">{{ element.address }}</td>
-          </ng-container>
-
-          <!-- Created At Column -->
-          <ng-container matColumnDef="created_at">
-            <th mat-header-cell *matHeaderCellDef>Created Date</th>
-            <td mat-cell *matCellDef="let element">{{ formatDate(element.created_at) }}</td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-
-          <!-- No Data Row -->
-          <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell" [attr.colspan]="displayedColumns.length" style="text-align: center; padding: 1rem;">
-              {{ error || 'No enquiries found' }}
-            </td>
-          </tr>
-        </table>
-
-        <div *ngIf="isLoading" class="loading-overlay">
-          <mat-spinner diameter="40" color="primary"></mat-spinner>
+      @if (isLoading) {
+        <div class="loading-spinner">
+          <mat-spinner diameter="40"></mat-spinner>
         </div>
-      </div>
+      } @else {
+        <div class="table-container">
+          <table mat-table [dataSource]="dataSource" matSort class="enquiries-table">
+            <!-- No Column -->
+            <ng-container matColumnDef="no">
+              <th mat-header-cell *matHeaderCellDef> No. </th>
+              <td mat-cell *matCellDef="let enquiry; let i = index">
+                {{ (currentPage - 1) * pageSize + i + 1 }}
+              </td>
+            </ng-container>
 
-      <div class="pagination-container" *ngIf="dataSource && dataSource.length > 0">
-        <div class="pagination-controls">
-          <!-- <button mat-icon-button [disabled]="!pagination.hasPrevious" (click)="goToFirst()" matTooltip="First Page">
-            <mat-icon>first_page</mat-icon>
-          </button>
-          <button mat-icon-button [disabled]="!pagination.hasPrevious" (click)="loadEnquiries(pagination.currentPage - 1)" matTooltip="Previous Page">
-            <mat-icon>chevron_left</mat-icon>
-          </button> -->
-          Goto Page
-          <mat-form-field class="page-number-input" appearance="outline">
-            <input matInput type="number" [(ngModel)]="customPageNumber" (keyup.enter)="goToPage(customPageNumber)" min="1" [max]="pagination.totalPages">
-            <span matSuffix> 
-              <!-- / {{pagination.totalPages}} -->
-            </span>
-          </mat-form-field>
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+              <td mat-cell *matCellDef="let enquiry"> {{enquiry.name}} </td>
+            </ng-container>
 
-          <!-- <button mat-icon-button [disabled]="!pagination.hasNext" (click)="loadEnquiries(pagination.currentPage + 1)" matTooltip="Next Page">
-            <mat-icon>chevron_right</mat-icon>
-          </button>
-          <button mat-icon-button [disabled]="!pagination.hasNext" (click)="goToLast()" matTooltip="Last Page">
-            <mat-icon>last_page</mat-icon>
-          </button> -->
+            <!-- Company Column -->
+            <ng-container matColumnDef="company_name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Company </th>
+              <td mat-cell *matCellDef="let enquiry"> {{enquiry.company_name}} </td>
+            </ng-container>
+
+            <!-- Email Column -->
+            <ng-container matColumnDef="email">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+              <td mat-cell *matCellDef="let enquiry"> {{enquiry.email}} </td>
+            </ng-container>
+
+            <!-- Mobile Column -->
+            <ng-container matColumnDef="mobilenumber">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Mobile </th>
+              <td mat-cell *matCellDef="let enquiry"> {{enquiry.mobilenumber}} </td>
+            </ng-container>
+
+            <!-- Address Column -->
+            <ng-container matColumnDef="address">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Address </th>
+              <td mat-cell *matCellDef="let enquiry"> {{enquiry.address}} </td>
+            </ng-container>
+
+            <!-- Status Column -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+              <td mat-cell *matCellDef="let enquiry">
+                <mat-form-field appearance="outline" class="status-select">
+                  <mat-select [(value)]="enquiry.status" (selectionChange)="onStatusChange(enquiry.id, $event.value)">
+                    <mat-option *ngFor="let status of statusOptions" [value]="status.value">
+                      <mat-chip [color]="getStatusColor(status.value)" selected>
+                        {{status.label}}
+                      </mat-chip>
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </td>
+            </ng-container>
+
+            <!-- Date Column -->
+            <ng-container matColumnDef="created_at">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+              <td mat-cell *matCellDef="let enquiry"> {{formatDate(enquiry.created_at)}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <!-- No Data Row -->
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+                {{ error || 'No enquiries found' }}
+              </td>
+            </tr>
+          </table>
         </div>
 
-        <mat-paginator
-          [length]="pagination.totalRecords"
-          [pageSize]="pagination.pageSize"
-          [pageIndex]="pagination.currentPage - 1"
-          [pageSizeOptions]="[2, 5, 10, 25, 50]"
-          (page)="onPageChange($event)"
-          showFirstLastButtons
-          aria-label="Select page">
-        </mat-paginator>
-      </div>
+        <div class="pagination-container">
+          <div class="pagination-controls">
+            Goto Page
+            <mat-form-field class="page-number-input" appearance="outline">
+              <input matInput type="number" [(ngModel)]="currentPage" 
+                     (keyup.enter)="goToPage(currentPage)" 
+                     min="1" [max]="getTotalPages()">
+            </mat-form-field>
+          </div>
+
+          <mat-paginator
+            [length]="totalRecords"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="[2, 5, 10, 25, 100]"
+            [pageIndex]="currentPage - 1"
+            (page)="onPageChange($event)"
+            showFirstLastButtons
+            aria-label="Select page">
+          </mat-paginator>
+        </div>
+      }
     </mat-card-content>
   </mat-card>
 </div>

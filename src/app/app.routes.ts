@@ -13,6 +13,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'contact',
+    loadComponent: () => import('./components/contact/contact.component').then(m => m.ContactComponent),
+    canActivate: [authGuard]
+  },
+  {
     path: '',
     redirectTo: '/dashboard',
     pathMatch: 'full'

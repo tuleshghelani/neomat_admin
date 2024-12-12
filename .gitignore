@@ -76,3 +76,6 @@ replay_pid*
 
 # Angular
 .angular/
+
+environments/
+src/environments/environment.ts

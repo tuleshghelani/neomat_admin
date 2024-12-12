@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -17,6 +17,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { environment } from '../../../environments/environment';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatSelectModule } from '@angular/material/select';
+import { EnquiryService } from '../../services/enquiry.service';
 
 interface EnquiryData {
   id: string;
@@ -25,6 +29,7 @@ interface EnquiryData {
   email: string;
   mobilenumber: string;
   address: string;
+  status: string;
   created_at: string;
 }
 
@@ -57,14 +62,27 @@ interface ApiResponse {
     MatCardModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatSortModule,
+    MatChipsModule,
+    MatSelectModule
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-  displayedColumns: string[] = ['no', 'name', 'company_name', 'email', 'mobilenumber', 'address', 'created_at'];
+  displayedColumns: string[] = ['no', 'name', 'company_name', 'email', 'mobilenumber', 'address', 'status', 'created_at'];
   dataSource: EnquiryData[] = [];
+  currentPage = 1;
+
+  pageSize: number = 10; 
+  totalRecords: number = 0; 
+
+  statusOptions = [
+    { value: 'P', label: 'Pending' },
+    { value: 'C', label: 'Completed' },
+    { value: 'D', label: 'Declined' }
+  ];
   pagination: PaginationInfo = {
     currentPage: 1,
     pageSize: 10,
@@ -77,21 +95,37 @@ export class DashboardComponent implements OnInit, OnDestroy {
   isLoading = false;
   customPageNumber = 1;
   error: string | null = null;
+  @ViewChild(MatSort) sort!: MatSort;
   private destroy$ = new Subject<void>();
 
   constructor(
     private http: HttpClient,
     private ngZone: NgZone,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private enquiryService: EnquiryService
   ) {}
 
   ngOnInit() {
     this.loadEnquiries();
   }
 
+  
+  getTotalPages(): number {
+    return Math.ceil(this.totalRecords / this.pageSize);
+}
+
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  ngAfterViewInit() {
+    if (this.sort) {
+      this.sort.sortChange.subscribe(() => {
+        // Handle sort
+        this.loadEnquiries(1);
+      });
+    }
   }
 
   loadEnquiries(page: number = 1) {
@@ -173,5 +207,43 @@ export class DashboardComponent implements OnInit, OnDestroy {
       panelClass: ['error-snackbar']
     });
     this.isLoading = false;
+  }
+
+  getStatusColor(status: string): string {
+    switch (status) {
+      case 'C': return 'primary';
+      case 'D': return 'warn';
+      default: return 'accent';
+    }
+  }
+
+  getStatusText(status: string): string {
+    switch (status) {
+      case 'C': return 'Completed';
+      case 'D': return 'Declined';
+      default: return 'Pending';
+    }
+  }
+
+  onStatusChange(id: string, newStatus: string): void {
+    this.enquiryService.updateEnquiryStatus(id, newStatus).subscribe({
+      next: (response) => {
+        this.snackBar.open(response.message, 'Close', {
+          duration: 3000,
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          panelClass: ['success-snackbar']
+        });
+        this.loadEnquiries(this.currentPage);
+      },
+      error: (error) => {
+        this.snackBar.open('Failed to update status', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          panelClass: ['error-snackbar']
+        });
+      }
+    });
   }
 }

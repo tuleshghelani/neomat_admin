@@ -3,19 +3,19 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
-export interface Enquiry {
+export interface Contact {
   id: string;
-  name: string;
-  company_name: string;
+  full_name: string;
   email: string;
+  subject: string;
   mobilenumber: string;
-  address: string;
+  message: string;
   status: string;
   created_at: string;
 }
 
 export interface ApiResponse {
-  data: Enquiry[];
+  data: Contact[];
   pagination: {
     currentPage: number;
     pageSize: number;
@@ -33,20 +33,20 @@ export interface StatusUpdateResponse {
 @Injectable({
   providedIn: 'root'
 })
-export class EnquiryService {
+export class ContactService {
   private baseURL = environment.baseURL;
 
   constructor(private http: HttpClient) {}
 
-  getAllEnquiries(page: number = 1, pageSize: number = 10): Observable<ApiResponse> {
+  getAllContacts(page: number = 1, pageSize: number = 10): Observable<ApiResponse> {
     const payload = { page, pageSize };
-    return this.http.post<ApiResponse>(`${this.baseURL}/api/enquiries/getAllEnquiries/`, payload);
+    return this.http.post<ApiResponse>(`${this.baseURL}/api/contacts/getAllContacts/`, payload);
   }
 
-  updateEnquiryStatus(id: string, status: string): Observable<StatusUpdateResponse> {
-    return this.http.put<StatusUpdateResponse>(`${this.baseURL}/api/enquiries/updateStatus/`, {
+  updateContactStatus(id: string, status: string): Observable<StatusUpdateResponse> {
+    return this.http.put<StatusUpdateResponse>(`${this.baseURL}/api/contacts/updateStatus/`, {
       id,
       status
     });
   }
-}
+} 
