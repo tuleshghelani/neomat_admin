@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
@@ -38,15 +38,25 @@ export class ContactService {
 
   constructor(private http: HttpClient) {}
 
+  private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  }
+
   getAllContacts(page: number = 1, pageSize: number = 10): Observable<ApiResponse> {
     const payload = { page, pageSize };
-    return this.http.post<ApiResponse>(`${this.baseURL}/api/contacts/getAllContacts/`, payload);
+    return this.http.post<ApiResponse>(
+      `${this.baseURL}/api/contacts/getAllContacts/`, 
+      payload,
+      { headers: this.getHeaders() }
+    );
   }
 
   updateContactStatus(id: string, status: string): Observable<StatusUpdateResponse> {
-    return this.http.put<StatusUpdateResponse>(`${this.baseURL}/api/contacts/updateStatus/`, {
-      id,
-      status
-    });
+    return this.http.put<StatusUpdateResponse>(
+      `${this.baseURL}/api/contacts/updateStatus/`,
+      { id, status },
+      { headers: this.getHeaders() }
+    );
   }
 } 

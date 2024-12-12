@@ -25,6 +25,7 @@ import { DatePipe } from '@angular/common';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routes';
 import { HeaderComponent } from "./components/header/header.component";
+import { authInterceptor } from './interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [AppComponent],
@@ -55,6 +56,10 @@ import { HeaderComponent } from "./components/header/header.component";
     MatExpansionModule,
     MatNativeDateModule,
     MatDialogModule, HeaderComponent],
+    providers: [
+      { provide: HTTP_INTERCEPTORS, useClass: authInterceptor, multi: true },
+      DatePipe
+    ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

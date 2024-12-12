@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -10,27 +10,39 @@ import { environment } from '../../environments/environment';
 export class AuthService {
   private baseURL = environment.baseURL;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ) {}
 
   login(email: string, password: string, rememberMe: boolean): Observable<any> {
-    return this.http.post(`${this.baseURL}/api/auth/login`, { email, password, rememberMe })
-      .pipe(
-        tap((response: any) => {
+    return this.http.post(`${this.baseURL}/api/auth/login`, {
+      email,
+      password,
+      rememberMe
+    }).pipe(
+      tap((response: any) => {
+        if (response.token) {
           localStorage.setItem('token', response.token);
-        })
-      );
-  }
-
-  getToken(): string | null {
-    return localStorage.getItem('token');
+        }
+      })
+    );
   }
 
   logout(): Observable<any> {
-    localStorage.removeItem('token');
-    return of({});
+    return new Observable(observer => {
+      try {
+        localStorage.clear();
+        this.router.navigate(['/login']);
+        observer.next(true);
+        observer.complete();
+      } catch (error) {
+        observer.error(error);
+      }
+    });
   }
 
   isLoggedIn(): boolean {
-    return !!this.getToken();
+    return !!localStorage.getItem('token');
   }
 }
