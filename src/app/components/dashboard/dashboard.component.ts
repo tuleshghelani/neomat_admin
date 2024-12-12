@@ -31,6 +31,9 @@ interface EnquiryData {
   address: string;
   status: string;
   created_at: string;
+  country: string;
+  designation: string;
+  productname: string;
 }
 
 interface PaginationInfo {
@@ -71,7 +74,8 @@ interface ApiResponse {
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-  displayedColumns: string[] = ['no', 'name', 'company_name', 'email', 'mobilenumber', 'address', 'status', 'created_at'];
+  displayedColumns: string[] = ['no', 'name', 'company_name', 'email', 'mobilenumber', 'address'
+    ,'country', 'designation', 'productname', 'status', 'created_at'];
   dataSource: EnquiryData[] = [];
   currentPage = 1;
 

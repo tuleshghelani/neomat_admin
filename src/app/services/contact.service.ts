@@ -12,6 +12,9 @@ export interface Contact {
   message: string;
   status: string;
   created_at: string;
+  company_name: string;
+  designation: string;
+  country: string;
 }
 
 export interface ApiResponse {

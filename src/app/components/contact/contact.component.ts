@@ -37,7 +37,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrl: './contact.component.scss'
 })
 export class ContactComponent implements OnInit {
-  displayedColumns: string[] = ['no', 'full_name', 'email', 'subject', 'mobilenumber', 'status', 'created_at'];
+  displayedColumns: string[] = ['no', 'full_name', 'email', 'subject', 'mobilenumber',
+    'company_name', 'designation', 'country', 'status', 'created_at'];
   dataSource: Contact[] = [];
   isLoading = true;
   totalRecords = 0;
