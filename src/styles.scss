@@ -1,47 +1,26 @@
 @use '@angular/material' as mat;
 
-:root {
-  --primary-color: #17a3de;
-  --accent-color: #a1a1a6;
-  --silver-light: #f5f5f7;
-  --silver-dark: #e1e1e3;
-  --gray-light: #d4d4d8;
-  --gray-dark: #a1a1a6;
-  --white: #ffffff;
-  --black: #000000;
-}
+// Include the common styles for Angular Material
+@include mat.core();
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-color: var(--silver-light);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-// Material Theme
-$primary-palette: (
-  50: lighten(#17a3de, 40%),
-  100: lighten(#17a3de, 30%),
-  200: lighten(#17a3de, 20%),
-  300: lighten(#17a3de, 10%),
-  400: lighten(#17a3de, 5%),
+// Define a custom primary palette
+$custom-primary: (
+  50: #e1f5fe,
+  100: #b3e5fc,
+  200: #81d4fa,
+  300: #4fc3f7,
+  400: #29b6f6,
   500: #17a3de,
-  600: darken(#17a3de, 5%),
-  700: darken(#17a3de, 10%),
-  800: darken(#17a3de, 20%),
-  900: darken(#17a3de, 30%),
+  600: #039be5,
+  700: #0288d1,
+  800: #0277bd,
+  900: #01579b,
   contrast: (
-    50: rgba(black, 0.87),
-    100: rgba(black, 0.87),
-    200: rgba(black, 0.87),
-    300: white,
-    400: white,
+    50: rgba(0, 0, 0, 0.87),
+    100: rgba(0, 0, 0, 0.87),
+    200: rgba(0, 0, 0, 0.87),
+    300: rgba(0, 0, 0, 0.87),
+    400: rgba(0, 0, 0, 0.87),
     500: white,
     600: white,
     700: white,
@@ -50,78 +29,138 @@ $primary-palette: (
   )
 );
 
-$accent-palette: (
-  50: lighten(#a1a1a6, 40%),
-  100: lighten(#a1a1a6, 30%),
-  200: lighten(#a1a1a6, 20%),
-  300: lighten(#a1a1a6, 10%),
-  400: lighten(#a1a1a6, 5%),
-  500: #a1a1a6,
-  600: darken(#a1a1a6, 5%),
-  700: darken(#a1a1a6, 10%),
-  800: darken(#a1a1a6, 20%),
-  900: darken(#a1a1a6, 30%),
-  contrast: (
-    50: rgba(black, 0.87),
-    100: rgba(black, 0.87),
-    200: rgba(black, 0.87),
-    300: rgba(black, 0.87),
-    400: rgba(black, 0.87),
-    500: white,
-    600: white,
-    700: white,
-    800: white,
-    900: white,
-  )
-);
+// Define theme colors
+$primary: mat.define-palette($custom-primary, 500);
+$accent: mat.define-palette(mat.$teal-palette);
+$warn: mat.define-palette(mat.$red-palette);
 
-$theme-primary: mat.define-palette($primary-palette);
-$theme-accent: mat.define-palette($accent-palette);
-
+// Create the theme object
 $theme: mat.define-light-theme((
   color: (
-    primary: $theme-primary,
-    accent: $theme-accent,
+    primary: $primary,
+    accent: $accent,
+    warn: $warn,
   ),
   typography: mat.define-typography-config(),
   density: 0,
 ));
 
-@include mat.core();
+// Apply the theme to all Angular Material components
 @include mat.all-component-themes($theme);
 
-// Global styles
-.mat-mdc-card {
-  border-radius: 12px !important;
+
+
+$primary: #17a3de;
+$primary-lighter: #e1f5fe;
+$primary-light: #4fc3f7;
+$primary-dark: #0288d1;
+$accent: #009688;
+$warn: #f44336;
+// Custom CSS Variables
+:root {
+  // Theme colors
+  --primary: #17a3de;
+  --primary-lighter: #e1f5fe;
+  --primary-light: #4fc3f7;
+  --primary-dark: #0288d1;
+  --accent: #009688;
+  --warn: #f44336;
+  
+  // Background colors
+  --background: #f5f7fa;
+  --surface: #ffffff;
+  --hover: rgba(23, 163, 222, 0.04);
+  
+  // Text colors
+  --text-primary: rgba(0, 0, 0, 0.87);
+  --text-secondary: rgba(0, 0, 0, 0.6);
+  --text-hint: rgba(0, 0, 0, 0.38);
+  --text-white: #ffffff;
+  
+  // Border colors
+  --border-light: rgba(0, 0, 0, 0.12);
+  --border-dark: rgba(0, 0, 0, 0.22);
+  
+  // Shadows
+  --shadow-1: 0 2px 4px rgba(0,0,0,0.1);
+  --shadow-2: 0 4px 8px rgba(0,0,0,0.12);
 }
 
-.mat-mdc-button, .mat-mdc-raised-button {
-  border-radius: 8px !important;
+// Global styles
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: var(--background);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+// Material Component Overrides
+.mat-mdc-card {
+  border-radius: 8px !important;
+  box-shadow: var(--shadow-1) !important;
+  background-color: var(--surface) !important;
+  
+  &:hover {
+    box-shadow: var(--shadow-2) !important;
+  }
+}
+
+.mat-mdc-table {
+  background: transparent !important;
+  
+  .mat-mdc-header-cell {
+    background-color: var(--primary) !important;
+    color: var(--text-white) !important;
+    font-weight: 500 !important;
+    border-bottom: none !important;
+  }
+  
+  .mat-mdc-row {
+    &:hover {
+      background-color: var(--hover) !important;
+    }
+  }
+  
+  .mat-mdc-cell {
+    color: var(--text-primary) !important;
+    border-bottom-color: var(--border-light) !important;
+  }
+}
+
+.mat-mdc-paginator {
+  background: transparent !important;
+}
+
+.mat-mdc-form-field {
+  &.mat-mdc-form-field-type-mat-input {
+    .mat-mdc-text-field-wrapper {
+      background-color: var(--surface) !important;
+    }
+  }
+}
+
+// Utility classes
+.text-primary { color: var(--primary) !important; }
+.text-accent { color: var(--accent) !important; }
+.text-warn { color: var(--warn) !important; }
+.bg-primary { background-color: var(--primary) !important; }
+.bg-hover { background-color: var(--hover) !important; }
 
 // Responsive utilities
-.hide-on-mobile {
-  @media (max-width: 600px) {
+@media screen and (max-width: 600px) {
+  .hide-on-mobile {
     display: none !important;
   }
 }
 
-.show-on-mobile {
-  @media (min-width: 601px) {
-    display: none !important;
-  }
-}
-
-// Animation classes
-.fade-in {
-  animation: fadeIn 0.3s ease-in;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+// Animations
+.fade {
+  transition: opacity 0.15s linear;
+  &-enter { opacity: 0; }
+  &-enter-active { opacity: 1; }
+  &-exit { opacity: 1; }
+  &-exit-active { opacity: 0; }
 }
